@@ -1,0 +1,44 @@
+# --- Virtual environments ---
+venv/
+.venv/
+env/
+.env/
+
+# --- Python bytecode/cache ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Distribution / packaging ---
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Test / coverage reports ---
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# --- Type checkers / linters ---
+.mypy_cache/
+.pytype/
+.pyright/
+.ruff_cache/
+
+# --- Tox / Nox ---
+.tox/
+.nox/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- IDE/editor junk ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# --- Environment variables (secrets) ---
+*.env
