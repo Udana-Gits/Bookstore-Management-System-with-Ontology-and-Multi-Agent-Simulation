@@ -1,0 +1,968 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="http://example.org/bookstore.owl"
+         xmlns="http://example.org/bookstore.owl#"
+         xmlns:swrl="http://www.w3.org/2003/11/swrl#">
+
+<owl:Ontology rdf:about="http://example.org/bookstore.owl"/>
+
+<owl:ObjectProperty rdf:about="#purchases">
+  <rdfs:domain rdf:resource="#Customer"/>
+  <rdfs:range rdf:resource="#Book"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#worksAt">
+  <rdfs:domain rdf:resource="#Employee"/>
+  <rdfs:range rdf:resource="#Inventory"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#involves">
+  <rdfs:domain rdf:resource="#Transaction"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:ObjectProperty>
+
+<owl:DatatypeProperty rdf:about="#hasAuthor">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#hasGenre">
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#hasPrice">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#availableQuantity">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+</owl:DatatypeProperty>
+
+<owl:Class rdf:about="#Book">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Customer">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Employee">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Inventory">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Transaction">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:Class rdf:about="#LowStock">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
+
+<owl:NamedIndividual rdf:about="#MainInventory">
+  <rdf:type rdf:resource="#Inventory"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#මඩොල් දූව (Madol Doova)">
+  <rdf:type rdf:resource="#Book"/>
+  <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Martin Wickramasinghe</hasAuthor>
+  <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
+  <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1250.0</hasPrice>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</availableQuantity>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#ගම්පෙරලිය (Gamperaliya)">
+  <rdf:type rdf:resource="#Book"/>
+  <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Martin Wickramasinghe</hasAuthor>
+  <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
+  <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2400.0</hasPrice>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</availableQuantity>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#විරාගය (Viragaya)">
+  <rdf:type rdf:resource="#Book"/>
+  <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Martin Wickramasinghe</hasAuthor>
+  <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
+  <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1850.0</hasPrice>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</availableQuantity>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#ගොළු හදවත (Golu Hadawatha)">
+  <rdf:type rdf:resource="#Book"/>
+  <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Karunasena Jayalath</hasAuthor>
+  <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
+  <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Romance</hasGenre>
+  <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1650.0</hasPrice>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</availableQuantity>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#මළගිය අත්තෝ (Malagiya Aththo)">
+  <rdf:type rdf:resource="#Book"/>
+  <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ediriweera Sarachchandra</hasAuthor>
+  <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
+  <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2200.0</hasPrice>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</availableQuantity>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)">
+  <rdf:type rdf:resource="#Book"/>
+  <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Simon Nawagattegama</hasAuthor>
+  <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
+  <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1450.0</hasPrice>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</availableQuantity>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Cust_0">
+  <rdf:type rdf:resource="#Customer"/>
+  <purchases rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <purchases rdf:resource="#විරාගය (Viragaya)"/>
+  <purchases rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <purchases rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <purchases rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+  <purchases rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Cust_1">
+  <rdf:type rdf:resource="#Customer"/>
+  <purchases rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <purchases rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <purchases rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <purchases rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <purchases rdf:resource="#විරාගය (Viragaya)"/>
+  <purchases rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Cust_2">
+  <rdf:type rdf:resource="#Customer"/>
+  <purchases rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+  <purchases rdf:resource="#විරාගය (Viragaya)"/>
+  <purchases rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <purchases rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <purchases rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <purchases rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Cust_3">
+  <rdf:type rdf:resource="#Customer"/>
+  <purchases rdf:resource="#විරාගය (Viragaya)"/>
+  <purchases rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <purchases rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <purchases rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <purchases rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <purchases rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Emp_0">
+  <rdf:type rdf:resource="#Employee"/>
+  <worksAt rdf:resource="#MainInventory"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#Emp_1">
+  <rdf:type rdf:resource="#Employee"/>
+  <worksAt rdf:resource="#MainInventory"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_විරාගය (Viragaya)_0">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මඩොල් දූව (Madol Doova)_1">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_මළගිය අත්තෝ (Malagiya Aththo)_2">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_මඩොල් දූව (Madol Doova)_3">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_මඩොල් දූව (Madol Doova)_4">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_විරාගය (Viragaya)_5">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_විරාගය (Viragaya)_6">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_ගොළු හදවත (Golu Hadawatha)_7">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_මඩොල් දූව (Madol Doova)_8">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මඩොල් දූව (Madol Doova)_9">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_මඩොල් දූව (Madol Doova)_10">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_ගම්පෙරලිය (Gamperaliya)_11">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_ගොළු හදවත (Golu Hadawatha)_12">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_13">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_ගොළු හදවත (Golu Hadawatha)_14">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_ගම්පෙරලිය (Gamperaliya)_15">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මඩොල් දූව (Madol Doova)_16">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_විරාගය (Viragaya)_17">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_ගොළු හදවත (Golu Hadawatha)_18">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_19">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_මඩොල් දූව (Madol Doova)_20">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මඩොල් දූව (Madol Doova)_21">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_මළගිය අත්තෝ (Malagiya Aththo)_22">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_0"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_විරාගය (Viragaya)_23">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_ගම්පෙරලිය (Gamperaliya)_24">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_ගොළු හදවත (Golu Hadawatha)_25">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_මළගිය අත්තෝ (Malagiya Aththo)_26">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_0"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_27">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_ගම්පෙරලිය (Gamperaliya)_28">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_3"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_ගොළු හදවත (Golu Hadawatha)_29">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_0"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_30">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_මළගිය අත්තෝ (Malagiya Aththo)_31">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_මළගිය අත්තෝ (Malagiya Aththo)_32">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_විරාගය (Viragaya)_33">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_34">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_මළගිය අත්තෝ (Malagiya Aththo)_35">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_0"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_මළගිය අත්තෝ (Malagiya Aththo)_36">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_ගම්පෙරලිය (Gamperaliya)_37">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_විරාගය (Viragaya)_38">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_මළගිය අත්තෝ (Malagiya Aththo)_39">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_විරාගය (Viragaya)_40">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මළගිය අත්තෝ (Malagiya Aththo)_41">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_42">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_විරාගය (Viragaya)_43">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_විරාගය (Viragaya)_44">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_ගම්පෙරලිය (Gamperaliya)_45">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_46">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_ගොළු හදවත (Golu Hadawatha)_47">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_ගම්පෙරලිය (Gamperaliya)_48">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_ගොළු හදවත (Golu Hadawatha)_49">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_ගොළු හදවත (Golu Hadawatha)_50">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_මළගිය අත්තෝ (Malagiya Aththo)_51">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_0"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_මඩොල් දූව (Madol Doova)_52">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මඩොල් දූව (Madol Doova)_53">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_මළගිය අත්තෝ (Malagiya Aththo)_54">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_0"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_මඩොල් දූව (Madol Doova)_55">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මළගිය අත්තෝ (Malagiya Aththo)_56">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_විරාගය (Viragaya)_57">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_මළගිය අත්තෝ (Malagiya Aththo)_58">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_මඩොල් දූව (Madol Doova)_59">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_විරාගය (Viragaya)_60">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_මඩොල් දූව (Madol Doova)_61">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මළගිය අත්තෝ (Malagiya Aththo)_62">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_ගොළු හදවත (Golu Hadawatha)_63">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_64">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_මළගිය අත්තෝ (Malagiya Aththo)_65">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_ගම්පෙරලිය (Gamperaliya)_66">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_විරාගය (Viragaya)_67">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_මඩොල් දූව (Madol Doova)_68">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_විරාගය (Viragaya)_69">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_විරාගය (Viragaya)_70">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_විරාගය (Viragaya)_71">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_ගොළු හදවත (Golu Hadawatha)_72">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_ගම්පෙරලිය (Gamperaliya)_73">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_ගොළු හදවත (Golu Hadawatha)_74">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_ගොළු හදවත (Golu Hadawatha)_75">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_0"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_ගම්පෙරලිය (Gamperaliya)_76">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_3"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මඩොල් දූව (Madol Doova)_77">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_78">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_මඩොල් දූව (Madol Doova)_79">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_මඩොල් දූව (Madol Doova)_80">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_81">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_විරාගය (Viragaya)_82">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_83">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_ගම්පෙරලිය (Gamperaliya)_84">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_3"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_ගම්පෙරලිය (Gamperaliya)_85">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_ගොළු හදවත (Golu Hadawatha)_86">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_ගොළු හදවත (Golu Hadawatha)_87">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_ගම්පෙරලිය (Gamperaliya)_88">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_විරාගය (Viragaya)_89">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_90">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_ගොළු හදවත (Golu Hadawatha)_91">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_92">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)_93">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මළගිය අත්තෝ (Malagiya Aththo)_94">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_ගොළු හදවත (Golu Hadawatha)_95">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_ගොළු හදවත (Golu Hadawatha)_96">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_ගොළු හදවත (Golu Hadawatha)_97">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_මඩොල් දූව (Madol Doova)_98">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_විරාගය (Viragaya)_99">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_මඩොල් දූව (Madol Doova)_100">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මළගිය අත්තෝ (Malagiya Aththo)_101">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_මළගිය අත්තෝ (Malagiya Aththo)_102">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_0"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_ගොළු හදවත (Golu Hadawatha)_103">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_විරාගය (Viragaya)_104">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#විරාගය (Viragaya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_ගම්පෙරලිය (Gamperaliya)_105">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_ගොළු හදවත (Golu Hadawatha)_106">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_මළගිය අත්තෝ (Malagiya Aththo)_107">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_ගම්පෙරලිය (Gamperaliya)_108">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_මඩොල් දූව (Madol Doova)_109">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_3"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_ගොළු හදවත (Golu Hadawatha)_110">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_ගොළු හදවත (Golu Hadawatha)_111">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_0"/>
+  <involves rdf:resource="#ගොළු හදවත (Golu Hadawatha)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මඩොල් දූව (Madol Doova)_112">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_ගම්පෙරලිය (Gamperaliya)_113">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_3"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_මඩොල් දූව (Madol Doova)_114">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_මළගිය අත්තෝ (Malagiya Aththo)_115">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_0"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_3_ගම්පෙරලිය (Gamperaliya)_116">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_3"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_1_මඩොල් දූව (Madol Doova)_117">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#මඩොල් දූව (Madol Doova)"/>
+  <involves rdf:resource="#Cust_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_2_ගම්පෙරලිය (Gamperaliya)_118">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#ගම්පෙරලිය (Gamperaliya)"/>
+  <involves rdf:resource="#Cust_2"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Cust_0_මළගිය අත්තෝ (Malagiya Aththo)_119">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Cust_0"/>
+  <involves rdf:resource="#මළගිය අත්තෝ (Malagiya Aththo)"/>
+</owl:NamedIndividual>
+
+<swrl:Variable rdf:about="urn:swrl#t"/>
+
+<swrl:Variable rdf:about="urn:swrl#c"/>
+
+<swrl:Variable rdf:about="urn:swrl#b"/>
+
+<swrl:Imp>
+  <swrl:body>
+    <rdf:Description>
+      <rdf:first>
+        <swrl:ClassAtom>
+          <swrl:classPredicate rdf:resource="#Transaction"/>
+          <swrl:argument1 rdf:resource="urn:swrl#t"/>
+        </swrl:ClassAtom>
+      </rdf:first>
+      <rdf:rest>
+        <rdf:Description>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="#involves"/>
+              <swrl:argument1 rdf:resource="urn:swrl#t"/>
+              <swrl:argument2 rdf:resource="urn:swrl#c"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <rdf:Description>
+              <rdf:first>
+                <swrl:IndividualPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="#involves"/>
+                  <swrl:argument1 rdf:resource="urn:swrl#t"/>
+                  <swrl:argument2 rdf:resource="urn:swrl#b"/>
+                </swrl:IndividualPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <rdf:Description>
+                  <rdf:first>
+                    <swrl:ClassAtom>
+                      <swrl:classPredicate rdf:resource="#Customer"/>
+                      <swrl:argument1 rdf:resource="urn:swrl#c"/>
+                    </swrl:ClassAtom>
+                  </rdf:first>
+                  <rdf:rest>
+                    <rdf:Description>
+                      <rdf:first>
+                        <swrl:ClassAtom>
+                          <swrl:classPredicate rdf:resource="#Book"/>
+                          <swrl:argument1 rdf:resource="urn:swrl#b"/>
+                        </swrl:ClassAtom>
+                      </rdf:first>
+                      <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:Description>
+                  </rdf:rest>
+                </rdf:Description>
+              </rdf:rest>
+            </rdf:Description>
+          </rdf:rest>
+        </rdf:Description>
+      </rdf:rest>
+    </rdf:Description>
+  </swrl:body>
+  <swrl:head>
+    <rdf:Description>
+      <rdf:first>
+        <swrl:IndividualPropertyAtom>
+          <swrl:propertyPredicate rdf:resource="#purchases"/>
+          <swrl:argument1 rdf:resource="urn:swrl#c"/>
+          <swrl:argument2 rdf:resource="urn:swrl#b"/>
+        </swrl:IndividualPropertyAtom>
+      </rdf:first>
+      <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </rdf:Description>
+  </swrl:head>
+</swrl:Imp>
+
+
+</rdf:RDF>

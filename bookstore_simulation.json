@@ -1,0 +1,83 @@
+{
+  "transaction_log": [],
+  "inventory_log": [
+    {
+      "step": 0,
+      "inventory": {
+        "Book_0": 2,
+        "Book_1": 8,
+        "Book_2": 6,
+        "Book_3": 4,
+        "Book_4": 4,
+        "Book_5": 3
+      }
+    },
+    {
+      "step": 5,
+      "inventory": {
+        "Book_0": 5,
+        "Book_1": 7,
+        "Book_2": 8,
+        "Book_3": 9,
+        "Book_4": 4,
+        "Book_5": 6
+      }
+    },
+    {
+      "step": 10,
+      "inventory": {
+        "Book_0": 4,
+        "Book_1": 4,
+        "Book_2": 6,
+        "Book_3": 4,
+        "Book_4": 9,
+        "Book_5": 8
+      }
+    },
+    {
+      "step": 15,
+      "inventory": {
+        "Book_0": 3,
+        "Book_1": 8,
+        "Book_2": 3,
+        "Book_3": 7,
+        "Book_4": 4,
+        "Book_5": 6
+      }
+    },
+    {
+      "step": 20,
+      "inventory": {
+        "Book_0": 10,
+        "Book_1": 3,
+        "Book_2": 7,
+        "Book_3": 5,
+        "Book_4": 8,
+        "Book_5": 10
+      }
+    },
+    {
+      "step": 25,
+      "inventory": {
+        "Book_0": 5,
+        "Book_1": 9,
+        "Book_2": 4,
+        "Book_3": 9,
+        "Book_4": 6,
+        "Book_5": 6
+      }
+    },
+    {
+      "step": 60,
+      "inventory": {
+        "Book_0": 3,
+        "Book_1": 8,
+        "Book_2": 9,
+        "Book_3": 4,
+        "Book_4": 3,
+        "Book_5": 4
+      }
+    }
+  ],
+  "step_count": 0
+}
