@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏪 Bookstore Simulation Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .controls {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, #dc3545, #fd7e14);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(45deg, #ffc107, #ff8c00);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .speed-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            margin: 0 10px;
+        }
+        
+        .speed-control label {
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .speed-slider {
+            width: 120px;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .speed-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #007bff;
+            cursor: pointer;
+        }
+        
+        .speed-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #007bff;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .card h3 {
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            transition: width 0.5s ease;
+            border-radius: 6px;
+        }
+        
+        .book-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .book-item:last-child {
+            border-bottom: none;
+        }
+        
+        .book-info {
+            flex: 1;
+        }
+        
+        .book-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .book-details {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .quantity-indicator {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-align: center;
+            min-width: 60px;
+        }
+        
+        .qty-high { background: #d4edda; color: #155724; }
+        .qty-medium { background: #fff3cd; color: #856404; }
+        .qty-low { background: #f8d7da; color: #721c24; }
+        
+        .customer-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .customer-activity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .activity-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .activity-high { background: #d4edda; color: #155724; }
+        .activity-medium { background: #fff3cd; color: #856404; }
+        .activity-low { background: #f8d7da; color: #721c24; }
+        
+        .transaction-log, .live-log {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .transaction-item, .log-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+            font-size: 0.9em;
+        }
+        
+        .transaction-item:last-child, .log-item:last-child {
+            border-bottom: none;
+        }
+        
+        .log-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .log-message {
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .log-timestamp {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-running { background: #28a745; }
+        .status-stopped { background: #dc3545; }
+        .status-paused { background: #ffc107; }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .running-indicator {
+            animation: pulse 2s infinite;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success { background: #28a745; }
+        .notification.error { background: #dc3545; }
+        .notification.info { background: #17a2b8; }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 Bookstore Simulation Dashboard</h1>
+            <p>Real-time Multi-Agent Business Simulation with Ontological Reasoning</p>
+        </div>
+        
+        <div class="controls">
+            <button id="startBtn" class="btn btn-primary">▶️ Start Simulation</button>
+            <button id="stopBtn" class="btn btn-danger" disabled>⏹️ Stop Simulation</button>
+            <button id="resetBtn" class="btn btn-warning">🔄 Reset</button>
+            <div class="speed-control">
+                <label for="speedSlider">⚡ Speed: <span id="speedValue">1x</span></label>
+                <input type="range" id="speedSlider" min="0.1" max="3" step="0.1" value="1" class="speed-slider">
+            </div>
+            <div class="status-indicator" id="statusIndicator"></div>
+            <span id="statusText">Ready</span>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="currentStep">0</div>
+                <div class="stat-label">Current Step</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalTransactions">0</div>
+                <div class="stat-label">Transactions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalRestocks">0</div>
+                <div class="stat-label">Restocks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalRevenue">LKR 0</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalCosts">LKR 0</div>
+                <div class="stat-label">Restocking Costs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="netProfit">LKR 0</div>
+                <div class="stat-label">Net Profit</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div style="text-align: center; margin-top: 5px;">
+                <span id="progressText">Ready to start simulation</span>
+            </div>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h3>📚 Inventory Status</h3>
+                <div id="inventoryList"></div>
+                <div class="chart-container">
+                    <canvas id="inventoryChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>👥 Customer Activity</h3>
+                <div id="customerList"></div>
+                <div class="chart-container">
+                    <canvas id="customerChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>� Live Transaction Log</h3>
+                <!-- Transaction list (populated by updateTransactionLog) -->
+                <div class="transaction-log" id="transactionLog">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Waiting for transactions...
+                    </div>
+                </div>
+
+                <!-- Removed duplicate live-log. The transactionLog below will show both transactions and live log messages. -->
+            </div>
+            
+            <div class="card">
+                <h3>📊 Real-time Analytics</h3>
+                <div class="chart-container">
+                    <canvas id="analyticsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        // Socket.IO connection
+        const socket = io();
+        
+        // Chart instances
+        let inventoryChart, customerChart, analyticsChart;
+        
+        // Simulation state
+        let simulationData = null;
+        let isRunning = false;
+        
+        // DOM elements
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+        
+        // Initialize charts
+        function initializeCharts() {
+            // Inventory Chart
+            const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+            inventoryChart = new Chart(inventoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Stock Level',
+                        data: [],
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // Customer Chart
+            const customerCtx = document.getElementById('customerChart').getContext('2d');
+            customerChart = new Chart(customerCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // Analytics Chart
+            const analyticsCtx = document.getElementById('analyticsChart').getContext('2d');
+            analyticsChart = new Chart(analyticsCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Transactions per Step',
+                        data: [],
+                        borderColor: '#36A2EB',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Total Revenue (LKR)',
+                        data: [],
+                        borderColor: '#4BC0C0',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update UI with simulation data
+        function updateUI(data) {
+            simulationData = data;
+            
+            // Update stats
+            document.getElementById('currentStep').textContent = data.current_step;
+            document.getElementById('totalTransactions').textContent = data.stats.total_transactions;
+            document.getElementById('totalRestocks').textContent = data.stats.total_restocks;
+            document.getElementById('totalRevenue').textContent = `LKR ${data.stats.total_revenue.toFixed(2)}`;
+            document.getElementById('totalCosts').textContent = `LKR ${data.stats.total_restocking_cost.toFixed(2)}`;
+            document.getElementById('netProfit').textContent = `LKR ${data.stats.net_profit.toFixed(2)}`;
+            
+            // Update live log messages
+            updateLiveLog(data.live_log_messages || []);
+            
+            // Update progress
+            const progress = (data.current_step / data.max_steps) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = 
+                `Step ${data.current_step} of ${data.max_steps} (${progress.toFixed(1)}%)`;
+            
+            // Update inventory
+            updateInventoryDisplay(data.books);
+            updateInventoryChart(data.books);
+            
+            // Update customers
+            updateCustomerDisplay(data.customers);
+            updateCustomerChart(data.customers);
+            
+            // Update transactions and live log
+            updateTransactionLog(data.transactions);
+            updateLiveLog(data.live_log_messages);
+            
+            // Update analytics chart
+            updateAnalyticsChart(data);
+        }
+        
+        function updateInventoryDisplay(books) {
+            const container = document.getElementById('inventoryList');
+            container.innerHTML = '';
+            
+            books.forEach(book => {
+                const item = document.createElement('div');
+                item.className = 'book-item';
+                
+                let qtyClass = 'qty-high';
+                if (book.quantity < 3) qtyClass = 'qty-low';
+                else if (book.quantity < 6) qtyClass = 'qty-medium';
+                
+                item.innerHTML = `
+                    <div class="book-info">
+                        <div class="book-name">${book.name}</div>
+                        <div class="book-details">
+                            ${book.author} • LKR ${book.price.toFixed(2)} • ${book.genres.join(', ')}
+                        </div>
+                    </div>
+                    <div class="quantity-indicator ${qtyClass}">
+                        ${book.quantity}
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+        
+        function updateInventoryChart(books) {
+            inventoryChart.data.labels = books.map(book => book.name);
+            inventoryChart.data.datasets[0].data = books.map(book => book.quantity);
+            inventoryChart.update('none');
+        }
+        
+        function updateCustomerDisplay(customers) {
+            const container = document.getElementById('customerList');
+            container.innerHTML = '';
+            
+            customers.forEach(customer => {
+                const item = document.createElement('div');
+                item.className = 'customer-item';
+                
+                let activityClass = 'activity-low';
+                if (customer.purchase_count > 8) activityClass = 'activity-high';
+                else if (customer.purchase_count > 4) activityClass = 'activity-medium';
+                
+                item.innerHTML = `
+                    <div>
+                        <strong>${customer.name}</strong><br>
+                        <small>LKR ${customer.total_spent.toFixed(2)} spent</small>
+                    </div>
+                    <div class="customer-activity">
+                        <span class="activity-badge ${activityClass}">
+                            ${customer.purchase_count} purchases
+                        </span>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+        
+        function updateCustomerChart(customers) {
+            customerChart.data.labels = customers.map(customer => customer.name);
+            customerChart.data.datasets[0].data = customers.map(customer => customer.purchase_count);
+            customerChart.update('none');
+        }
+        
+        function updateTransactionLog(transactions) {
+            const container = document.getElementById('transactionLog');
+            
+            if (transactions.length === 0) {
+                container.innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Waiting for transactions...
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            // Show last 20 transactions
+            const recentTransactions = transactions.slice(-20).reverse();
+            
+            recentTransactions.forEach(transaction => {
+                const item = document.createElement('div');
+                item.className = 'transaction-item';
+                // Price is already in LKR
+                item.innerHTML = `
+                    <strong>Step ${transaction.step}:</strong> 
+                    ${transaction.customer} purchased ${transaction.book} 
+                    for LKR ${transaction.price.toFixed(2)}
+                `;
+                container.appendChild(item);
+            });
+        }
+        
+        function updateLiveLog(logMessages) {
+            // Append log messages into the main transaction log area so we only have one live log
+            const container = document.getElementById('transactionLog');
+
+            if (!logMessages || logMessages.length === 0) {
+                return; // nothing to add
+            }
+
+            // Show last 20 log messages in reverse chronological order
+            const recentMessages = logMessages.slice(-20).reverse();
+
+            recentMessages.forEach(logEntry => {
+                const item = document.createElement('div');
+                item.className = 'transaction-item';
+
+                const timestamp = new Date(logEntry.timestamp * 1000).toLocaleTimeString();
+
+                item.innerHTML = `
+                    <strong>LOG:</strong> ${logEntry.message} <span style="float:right; font-size:0.8em; color:#6c757d">${timestamp}</span>
+                `;
+                container.appendChild(item);
+            });
+
+            // Auto-scroll to bottom to show latest messages
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function updateAnalyticsChart(data) {
+            // Calculate transactions per step
+            const stepData = {};
+            data.transactions.forEach(t => {
+                stepData[t.step] = (stepData[t.step] || 0) + 1;
+            });
+            
+            const steps = Array.from({length: data.current_step + 1}, (_, i) => i);
+            const transactionsPerStep = steps.map(step => stepData[step] || 0);
+            
+            // Calculate cumulative revenue in LKR
+            let cumulativeRevenue = 0;
+            const revenueData = steps.map(step => {
+                const stepTransactions = data.transactions.filter(t => t.step === step);
+                const stepRevenue = stepTransactions.reduce((sum, t) => {
+                    // Price is already in LKR
+                    return sum + t.price;
+                }, 0);
+                cumulativeRevenue += stepRevenue;
+                return cumulativeRevenue;
+            });
+            
+            analyticsChart.data.labels = steps;
+            analyticsChart.data.datasets[0].data = transactionsPerStep;
+            analyticsChart.data.datasets[1].data = revenueData;
+            analyticsChart.update('none');
+        }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        function updateStatus(status, running = false) {
+            statusText.textContent = status;
+            statusIndicator.className = `status-indicator ${running ? 'status-running' : 'status-stopped'}`;
+            
+            if (running) {
+                statusIndicator.classList.add('running-indicator');
+            } else {
+                statusIndicator.classList.remove('running-indicator');
+            }
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', () => {
+            socket.emit('start_simulation');
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            isRunning = true;
+            updateStatus('Running...', true);
+            showNotification('Simulation started!', 'success');
+        });
+        
+        stopBtn.addEventListener('click', () => {
+            socket.emit('stop_simulation');
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            isRunning = false;
+            updateStatus('Stopped', false);
+            showNotification('Simulation stopped!', 'info');
+        });
+        
+        resetBtn.addEventListener('click', () => {
+            socket.emit('reset_simulation');
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            isRunning = false;
+            updateStatus('Reset', false);
+            showNotification('Simulation reset!', 'info');
+        });
+        
+        // Speed control
+        const speedSlider = document.getElementById('speedSlider');
+        const speedValue = document.getElementById('speedValue');
+        
+        speedSlider.addEventListener('input', (e) => {
+            const speed = parseFloat(e.target.value);
+            speedValue.textContent = speed + 'x';
+            socket.emit('set_speed', { speed: speed });
+        });
+        
+        // Socket event listeners
+        socket.on('connect', () => {
+            console.log('Connected to server');
+            fetch('/api/data')
+                .then(response => response.json())
+                .then(data => updateUI(data));
+        });
+        
+        socket.on('simulation_update', (data) => {
+            updateUI(data);
+        });
+        
+        socket.on('new_transaction', (data) => {
+            // Handle individual transaction updates
+            console.log('New transaction:', data);
+        });
+        
+        socket.on('log_message', (data) => {
+            // Handle live log messages  
+            if (data.messages && Array.isArray(data.messages)) {
+                // Append new messages to existing ones
+                updateLiveLog(data.messages);
+            }
+        });
+        
+        socket.on('restock_event', (data) => {
+            showNotification(`📦 Restocked: ${data.book || 'Books'}`, 'info');
+        });
+        
+        socket.on('revenue_update', (data) => {
+            // Handle real-time revenue updates
+            if (simulationData && simulationData.stats) {
+                simulationData.stats.total_revenue = data.total_revenue;
+                simulationData.stats.total_restocking_cost = data.total_costs;
+                simulationData.stats.net_profit = data.net_profit;
+                
+                // Update revenue display immediately
+                document.getElementById('totalRevenue').textContent = `LKR ${data.total_revenue.toFixed(2)}`;
+                document.getElementById('totalCosts').textContent = `LKR ${data.total_costs.toFixed(2)}`;
+                document.getElementById('netProfit').textContent = `LKR ${data.net_profit.toFixed(2)}`;
+            }
+        });
+        
+        socket.on('simulation_finished', (data) => {
+            updateUI(data);
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            isRunning = false;
+            updateStatus('Completed', false);
+            showNotification('Simulation completed!', 'success');
+        });
+        
+        socket.on('simulation_reset', (data) => {
+            updateUI(data);
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeCharts();
+            updateStatus('Ready', false);
+        });
+    </script>
+</body>
+</html>
