@@ -295,6 +295,34 @@
             color: #495057;
         }
         
+        .transaction-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        
+        .purchase-badge { 
+            background: #28a745; 
+            color: white; 
+            border: 1px solid #1e7e34;
+        }
+        
+        .restock-badge { 
+            background: #007bff; 
+            color: white; 
+            border: 1px solid #0056b3;
+        }
+        
+        .entity-tag {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin: 0 2px;
+        }
+        
         .log-timestamp {
             font-size: 0.8em;
             color: #6c757d;
@@ -479,10 +507,16 @@
                 <!-- Removed duplicate live-log. The transactionLog below will show both transactions and live log messages. -->
             </div>
             
+
+
             <div class="card">
-                <h3>📊 Real-time Analytics</h3>
-                <div class="chart-container">
-                    <canvas id="analyticsChart"></canvas>
+                <h3>🧑‍💼 Employees</h3>
+                <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px;">
+                    <input id="newEmployeeName" placeholder="Employee name" style="flex:1; padding:8px; border-radius:8px; border:1px solid #ddd" />
+                    <button id="addEmployeeBtn" class="btn btn-primary">Add</button>
+                </div>
+                <div id="employeeList" style="max-height:220px; overflow:auto; background:#f8f9fa; padding:10px; border-radius:8px">
+                    <!-- employees populated by JS -->
                 </div>
             </div>
         </div>
@@ -495,11 +529,41 @@
         const socket = io();
         
         // Chart instances
-        let inventoryChart, customerChart, analyticsChart;
+        let inventoryChart, customerChart;
         
         // Simulation state
         let simulationData = null;
         let isRunning = false;
+        
+        // Color generation for entities
+        const entityColors = new Map();
+        
+        function generateEntityColor(entity, type) {
+            if (entityColors.has(entity)) {
+                return entityColors.get(entity);
+            }
+            
+            const colors = {
+                book: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'],
+                customer: ['#ee5a24', '#0abde3', '#10ac84', '#f9ca24', '#ff006e', '#8b59c2', '#f0932b', '#6c5ce7'],
+                employee: ['#a55eea', '#26de81', '#fd79a8', '#fdcb6e', '#e17055', '#74b9ff', '#00b894', '#00cec9']
+            };
+            
+            const colorSet = colors[type] || colors.book;
+            const hash = entity.split('').reduce((a, b) => {
+                a = ((a << 5) - a) + b.charCodeAt(0);
+                return a & a;
+            }, 0);
+            
+            const color = colorSet[Math.abs(hash) % colorSet.length];
+            entityColors.set(entity, color);
+            return color;
+        }
+        
+        function createEntityTag(entity, type) {
+            const color = generateEntityColor(entity, type);
+            return `<span class="entity-tag" style="background-color: ${color}; color: white;">${entity}</span>`;
+        }
         
         // DOM elements
         const startBtn = document.getElementById('startBtn');
@@ -568,50 +632,6 @@
                     }
                 }
             });
-            
-            // Analytics Chart
-            const analyticsCtx = document.getElementById('analyticsChart').getContext('2d');
-            analyticsChart = new Chart(analyticsCtx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Transactions per Step',
-                        data: [],
-                        borderColor: '#36A2EB',
-                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }, {
-                        label: 'Total Revenue (LKR)',
-                        data: [],
-                        borderColor: '#4BC0C0',
-                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        yAxisID: 'y1'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                        },
-                        y1: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            grid: {
-                                drawOnChartArea: false,
-                            },
-                        }
-                    }
-                }
-            });
         }
         
         // Update UI with simulation data
@@ -643,12 +663,11 @@
             updateCustomerDisplay(data.customers);
             updateCustomerChart(data.customers);
             
-            // Update transactions and live log
-            updateTransactionLog(data.transactions);
-            updateLiveLog(data.live_log_messages);
+            // Update unified transaction log (purchases + restocks in chronological order)
+            updateUnifiedTransactionLog(data.transactions, data.live_log_messages || []);
             
-            // Update analytics chart
-            updateAnalyticsChart(data);
+            // Update employees
+            updateEmployeeList(data.employees || []);
         }
         
         function updateInventoryDisplay(books) {
@@ -716,11 +735,109 @@
             customerChart.data.datasets[0].data = customers.map(customer => customer.purchase_count);
             customerChart.update('none');
         }
+
+        function updateEmployeeList(employees) {
+            const container = document.getElementById('employeeList');
+            container.innerHTML = '';
+            if (!employees || employees.length === 0) {
+                container.innerHTML = '<div style="color:#666; text-align:center; padding:20px;">No employees</div>';
+                return;
+            }
+            employees.forEach(emp => {
+                const div = document.createElement('div');
+                div.style.padding = '12px';
+                div.style.borderBottom = '1px solid #eee';
+                div.style.backgroundColor = '#fff';
+                div.style.borderRadius = '6px';
+                div.style.marginBottom = '8px';
+                
+                const restocksHandled = emp.restocks_handled || 0;
+                const costIncurred = emp.cost_incurred || 0;
+                
+                // Create activity level badge
+                let activityClass = 'activity-low';
+                let activityText = 'Low Activity';
+                if (restocksHandled > 5) {
+                    activityClass = 'activity-high';
+                    activityText = 'High Activity';
+                } else if (restocksHandled > 2) {
+                    activityClass = 'activity-medium';
+                    activityText = 'Medium Activity';
+                }
+                
+                div.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <strong style="font-size: 1.1em;">${emp.name}</strong>
+                        <span class="activity-badge ${activityClass}" style="font-size: 0.8em; padding: 4px 8px; border-radius: 12px;">${activityText}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; color: #666;">
+                        <span>Restocks: <strong>${restocksHandled}</strong></span>
+                        <span>Cost: <strong>LKR ${costIncurred.toFixed(2)}</strong></span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
         
-        function updateTransactionLog(transactions) {
+        function updateUnifiedTransactionLog(transactions, logMessages) {
             const container = document.getElementById('transactionLog');
             
-            if (transactions.length === 0) {
+            // Create a combined array of all transactions with timestamps
+            const allTransactions = [];
+            
+            // Add purchases with their step as timestamp
+            transactions.forEach(transaction => {
+                allTransactions.push({
+                    type: 'purchase',
+                    step: transaction.step || 0,
+                    timestamp: transaction.step || 0, // Use step as ordering mechanism
+                    data: transaction
+                });
+            });
+            
+            // Parse and add restocks from log messages
+            if (logMessages && logMessages.length > 0) {
+                logMessages
+                    .filter(logEntry => logEntry.message.toLowerCase().includes('restock'))
+                    .forEach(logEntry => {
+                        // Extract step number from message or use step property
+                        let step = logEntry.step;
+                        if (!step) {
+                            const stepMatch = logEntry.message.match(/Step (\d+):/);
+                            step = stepMatch ? parseInt(stepMatch[1]) : null;
+                        }
+                        
+                        allTransactions.push({
+                            type: 'restock', 
+                            step: step,
+                            timestamp: logEntry.timestamp || 0,
+                            data: logEntry
+                        });
+                    });
+            }
+            
+            // Sort by step number (most recent first), with proper handling of null values
+            allTransactions.sort((a, b) => {
+                // Both have steps - sort by step (newest first)
+                if (a.step !== null && b.step !== null) {
+                    return b.step - a.step;
+                }
+                // Only a has step - a comes first
+                if (a.step !== null && b.step === null) {
+                    return -1;
+                }
+                // Only b has step - b comes first  
+                if (a.step === null && b.step !== null) {
+                    return 1;
+                }
+                // Neither has step - sort by timestamp (newest first)
+                return b.timestamp - a.timestamp;
+            });
+            
+            // Take last 30 transactions for display
+            const recentTransactions = allTransactions.slice(0, 30);
+            
+            if (recentTransactions.length === 0) {
                 container.innerHTML = `
                     <div class="loading">
                         <div class="spinner"></div>
@@ -732,75 +849,71 @@
             
             container.innerHTML = '';
             
-            // Show last 20 transactions
-            const recentTransactions = transactions.slice(-20).reverse();
-            
             recentTransactions.forEach(transaction => {
                 const item = document.createElement('div');
                 item.className = 'transaction-item';
-                // Price is already in LKR
-                item.innerHTML = `
-                    <strong>Step ${transaction.step}:</strong> 
-                    ${transaction.customer} purchased ${transaction.book} 
-                    for LKR ${transaction.price.toFixed(2)}
-                `;
+                item.style.display = 'flex';
+                item.style.alignItems = 'center';
+                item.style.justifyContent = 'space-between';
+                
+                if (transaction.type === 'purchase') {
+                    const purchaseData = transaction.data;
+                    item.innerHTML = `
+                        <div style="display: flex; align-items: center;">
+                            <span class="transaction-badge purchase-badge">PURCHASE</span>
+                            <span><strong>Step ${purchaseData.step}:</strong> 
+                            <strong>${purchaseData.customer}</strong> purchased <strong>${purchaseData.book}</strong></span>
+                        </div>
+                        <span style="font-weight: bold; color: #28a745;">LKR ${purchaseData.price.toFixed(2)}</span>
+                    `;
+                } else if (transaction.type === 'restock') {
+                    const logEntry = transaction.data;
+                    // Parse restock message: "Step X: Restocked BookName by EmployeeName (qty=4, cost=LKR 120.00)"
+                    const restockMatch = logEntry.message.match(/(?:Step (\d+): )?Restocked (.+?) by (.+?) \(qty=(\d+), cost=LKR ([\d.]+)\)/);
+                    
+                    if (restockMatch) {
+                        const stepNum = restockMatch[1] || transaction.step;
+                        const bookName = restockMatch[2];
+                        const employeeName = restockMatch[3];
+                        const quantity = restockMatch[4];
+                        const cost = parseFloat(restockMatch[5]);
+                        
+                        const stepDisplay = stepNum ? `<strong>Step ${stepNum}:</strong> ` : '';
+                        
+                        item.innerHTML = `
+                            <div style="display: flex; align-items: center;">
+                                <span class="transaction-badge restock-badge">RESTOCK</span>
+                                <span>${stepDisplay}<strong>${employeeName}</strong> restocked <strong>${bookName}</strong> (Qty: ${quantity})</span>
+                            </div>
+                            <span style="font-weight: bold; color: #007bff;">LKR ${cost.toFixed(2)}</span>
+                        `;
+                    } else {
+                        // Fallback for unmatched restock messages
+                        item.innerHTML = `
+                            <div style="display: flex; align-items: center;">
+                                <span class="transaction-badge restock-badge">RESTOCK</span>
+                                <span>${logEntry.message}</span>
+                            </div>
+                            <span style="font-size:0.8em; color:#6c757d;">Restock</span>
+                        `;
+                    }
+                }
+                
                 container.appendChild(item);
             });
-        }
-        
-        function updateLiveLog(logMessages) {
-            // Append log messages into the main transaction log area so we only have one live log
-            const container = document.getElementById('transactionLog');
-
-            if (!logMessages || logMessages.length === 0) {
-                return; // nothing to add
-            }
-
-            // Show last 20 log messages in reverse chronological order
-            const recentMessages = logMessages.slice(-20).reverse();
-
-            recentMessages.forEach(logEntry => {
-                const item = document.createElement('div');
-                item.className = 'transaction-item';
-
-                const timestamp = new Date(logEntry.timestamp * 1000).toLocaleTimeString();
-
-                item.innerHTML = `
-                    <strong>LOG:</strong> ${logEntry.message} <span style="float:right; font-size:0.8em; color:#6c757d">${timestamp}</span>
-                `;
-                container.appendChild(item);
-            });
-
-            // Auto-scroll to bottom to show latest messages
+            
+            // Auto-scroll to bottom to show latest entries
             container.scrollTop = container.scrollHeight;
         }
         
-        function updateAnalyticsChart(data) {
-            // Calculate transactions per step
-            const stepData = {};
-            data.transactions.forEach(t => {
-                stepData[t.step] = (stepData[t.step] || 0) + 1;
-            });
-            
-            const steps = Array.from({length: data.current_step + 1}, (_, i) => i);
-            const transactionsPerStep = steps.map(step => stepData[step] || 0);
-            
-            // Calculate cumulative revenue in LKR
-            let cumulativeRevenue = 0;
-            const revenueData = steps.map(step => {
-                const stepTransactions = data.transactions.filter(t => t.step === step);
-                const stepRevenue = stepTransactions.reduce((sum, t) => {
-                    // Price is already in LKR
-                    return sum + t.price;
-                }, 0);
-                cumulativeRevenue += stepRevenue;
-                return cumulativeRevenue;
-            });
-            
-            analyticsChart.data.labels = steps;
-            analyticsChart.data.datasets[0].data = transactionsPerStep;
-            analyticsChart.data.datasets[1].data = revenueData;
-            analyticsChart.update('none');
+        function updateTransactionLog(transactions) {
+            // Legacy function - now handled by updateUnifiedTransactionLog
+            console.log('Legacy updateTransactionLog called with', transactions.length, 'transactions');
+        }
+        
+        function updateLiveLog(logMessages) {
+            // Legacy function - now handled by updateUnifiedTransactionLog  
+            console.log('Legacy updateLiveLog called with', logMessages ? logMessages.length : 0, 'log messages');
         }
         
         function showNotification(message, type = 'info') {
@@ -888,7 +1001,31 @@
         });
         
         socket.on('restock_event', (data) => {
-            showNotification(`📦 Restocked: ${data.book || 'Books'}`, 'info');
+            showNotification(`Restocked: ${data.book || 'Books'}`, 'info');
+            try {
+                const container = document.getElementById('transactionLog');
+                const item = document.createElement('div');
+                item.className = 'transaction-item';
+                item.style.display = 'flex';
+                item.style.alignItems = 'center';
+                item.style.justifyContent = 'space-between';
+                
+                // Use cost and quantity from the event data
+                const cost = data.cost || 0;
+                const quantity = data.quantity || 0;
+                
+                item.innerHTML = `
+                    <div style="display: flex; align-items: center;">
+                        <span class="transaction-badge restock-badge">RESTOCK</span>
+                        <span><strong>${data.by || 'Unknown'}</strong> restocked <strong>${data.book || 'Books'}</strong> (Qty: ${quantity})</span>
+                    </div>
+                    <span style="font-weight: bold; color: #007bff;">LKR ${cost.toFixed(2)}</span>
+                `;
+                container.appendChild(item);
+                container.scrollTop = container.scrollHeight;
+            } catch (e) {
+                console.error('restock_event UI update failed', e);
+            }
         });
         
         socket.on('revenue_update', (data) => {
@@ -916,6 +1053,15 @@
         
         socket.on('simulation_reset', (data) => {
             updateUI(data);
+        });
+
+        // Add employee button
+        const addEmployeeBtn = document.getElementById('addEmployeeBtn');
+        const newEmployeeName = document.getElementById('newEmployeeName');
+        addEmployeeBtn.addEventListener('click', () => {
+            const name = newEmployeeName.value && newEmployeeName.value.trim();
+            socket.emit('add_employee', { name: name });
+            newEmployeeName.value = '';
         });
         
         // Initialize

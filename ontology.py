@@ -40,12 +40,12 @@ def seed_data():
         
         # Practical book data with realistic Sri Lankan prices (LKR 1000-3000) and Sinhala names
         book_data = [
-            {"title": "මඩොල් දූව (Madol Doova)", "author": "Martin Wickramasinghe", "genres": ["Fiction"], "price": 1250.00},
-            {"title": "ගම්පෙරලිය (Gamperaliya)", "author": "Martin Wickramasinghe", "genres": ["Fiction"], "price": 2400.00},
-            {"title": "විරාගය (Viragaya)", "author": "Martin Wickramasinghe", "genres": ["Fiction"], "price": 1850.00},
-            {"title": "ගොළු හදවත (Golu Hadawatha)", "author": "Karunasena Jayalath", "genres": ["Romance", "Fiction"], "price": 1650.00},
-            {"title": "මළගිය අත්තෝ (Malagiya Aththo)", "author": "Ediriweera Sarachchandra", "genres": ["Fiction"], "price": 2200.00},
-            {"title": "සංසාරණ්‍යයේ උරුමය (Samsaranye Urumaya)", "author": "Simon Nawagattegama", "genres": ["Fiction"], "price": 1450.00}
+            {"title": "Madol Doova", "author": "Martin Wickramasinghe", "genres": ["Fiction"], "price": 1250.00},
+            {"title": "Gamperaliya", "author": "Martin Wickramasinghe", "genres": ["Fiction"], "price": 2400.00},
+            {"title": "Viragaya", "author": "Martin Wickramasinghe", "genres": ["Fiction"], "price": 1850.00},
+            {"title": "Golu Hadawatha", "author": "Karunasena Jayalath", "genres": ["Romance", "Fiction"], "price": 1650.00},
+            {"title": "Malagiya Aththo", "author": "Ediriweera Sarachchandra", "genres": ["Fiction"], "price": 2200.00},
+            {"title": "Samsaranye Urumaya", "author": "Simon Nawagattegama", "genres": ["Fiction"], "price": 1450.00}
         ]
         
         books = []

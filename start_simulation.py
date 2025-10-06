@@ -41,6 +41,7 @@ def create_simulation(seed=42, steps=100):
     m._server_live_logs = []
     m._server_step = 0
     m._restock_costs = 0.0
+    m._employee_stats = {}  # Track per-employee statistics
 
     # Wire model bus to forward events to websocket clients
     def purchase_handler(payload):
@@ -73,10 +74,16 @@ def create_simulation(seed=42, steps=100):
 
     def restock_handler(payload):
         try:
-            data = {
-                'book': getattr(payload.get('book'), 'title', None) or getattr(payload.get('book'), 'name', str(payload.get('book'))),
-                'by': getattr(payload.get('by'), 'name', str(payload.get('by'))),
-            }
+            book_obj = payload.get('book')
+            by_obj = payload.get('by')
+            by_name = None
+            try:
+                by_name = getattr(by_obj, 'title', None) or getattr(by_obj, 'name', None) or (str(by_obj) if by_obj is not None else None)
+            except Exception:
+                by_name = str(by_obj) if by_obj is not None else None
+            if not by_name:
+                by_name = 'System'
+            
             # compute restock cost (use model's restock_amount and book price)
             book_obj = payload.get('book')
             restock_qty = getattr(m, 'restock_amount', 0) or 0
@@ -87,11 +94,32 @@ def create_simulation(seed=42, steps=100):
                 price = float(getattr(book_obj, 'hasPrice', 0) or 0)
                 restock_price_per_book = max(0.0, price - 200.0)
                 cost = restock_qty * restock_price_per_book
+                
+            data = {
+                'book': getattr(book_obj, 'title', None) or getattr(book_obj, 'name', str(book_obj)),
+                'by': by_name,
+                'cost': cost,  # Include cost in the data
+                'quantity': restock_qty,  # Include quantity in the data
+            }
             # record costs server-side
             m._restock_costs = (getattr(m, '_restock_costs', 0.0) or 0.0) + cost
 
+            # Update employee statistics
+            if not hasattr(m, '_employee_stats'):
+                m._employee_stats = {}
+            if by_name not in m._employee_stats:
+                m._employee_stats[by_name] = {'restocks_handled': 0, 'cost_incurred': 0.0}
+            m._employee_stats[by_name]['restocks_handled'] += 1
+            m._employee_stats[by_name]['cost_incurred'] += cost
+
             # record restock as log
-            m._server_live_logs.append({'message': f"Restocked {data['book']} by {data['by']} (qty={restock_qty}, cost=LKR {cost:.2f})", 'timestamp': time.time()})
+            # include employee name and step information in the server log message
+            current_step = getattr(m, '_server_step', 0) or 0
+            m._server_live_logs.append({
+                'message': f"Step {current_step}: Restocked {data['book']} by {by_name} (qty={restock_qty}, cost=LKR {cost:.2f})", 
+                'timestamp': time.time(),
+                'step': current_step
+            })
             socketio.emit('restock_event', data)
 
             # Immediately update clients about revenue/costs
@@ -143,6 +171,27 @@ def snapshot(simulation):
     except Exception:
         pass
 
+    # employees: try to get from simulation if available, otherwise from ontology
+    employees = []
+    try:
+        emps = getattr(simulation, 'employees', None)
+        if emps is None:
+            emps = onto.Employee.instances()
+        employee_stats = getattr(simulation, '_employee_stats', {})
+        for e in emps:
+            try:
+                emp_name = getattr(e, 'name', str(e))
+                stats = employee_stats.get(emp_name, {'restocks_handled': 0, 'cost_incurred': 0.0})
+                employees.append({
+                    'name': emp_name,
+                    'restocks_handled': stats['restocks_handled'],
+                    'cost_incurred': stats['cost_incurred'],
+                })
+            except Exception:
+                pass
+    except Exception:
+        employees = []
+
     # compute simple stats from recorded transactions
     transactions = list(getattr(simulation, '_server_transactions', []))
     total_revenue = sum(t.get('price', 0) for t in transactions)
@@ -152,6 +201,7 @@ def snapshot(simulation):
     data = {
         'books': books,
         'customers': customers,
+        'employees': employees,
         'transactions': transactions,
         'live_log_messages': list(getattr(simulation, '_server_live_logs', [])),
         'current_step': int(getattr(simulation, '_server_step', 0) or 0),
@@ -268,6 +318,38 @@ def on_set_speed(data):
         sim_speed = max(0.01, speed)
     except Exception:
         pass
+
+
+@socketio.on('add_employee')
+def on_add_employee(data):
+    """Create an Employee in the ontology and register an agent at runtime.
+    Expects data: { 'name': 'Emp_Name' } (optional name)"""
+    name = (data or {}).get('name')
+    with sim_lock:
+        try:
+            # create unique name if not provided
+            base = name or f"EmpRuntime"
+            # ensure unique suffix
+            idx = 0
+            candidate = f"{base}_{idx}"
+            while hasattr(onto, candidate):
+                idx += 1
+                candidate = f"{base}_{idx}"
+            # create ontology Employee
+            Emp = onto.Employee
+            new_emp = Emp(candidate)
+            # attach to inventory if sim exists
+            if sim:
+                sim.add_employee(new_emp)
+                # return updated snapshot
+                socketio.emit('simulation_update', snapshot(sim))
+                socketio.emit('restock_event', {'book': None, 'by': new_emp.name})
+                socketio.emit('notification', {'message': f'Employee {new_emp.name} added', 'type': 'success'})
+                return {'status': 'ok', 'name': new_emp.name}
+            else:
+                return {'status': 'no_sim'}
+        except Exception as e:
+            return {'status': 'error', 'error': str(e)}
 
 
 def open_browser_delayed(url, delay=1.0):
