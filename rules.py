@@ -6,7 +6,7 @@ LOW_STOCK_THRESHOLD = 3
 
 def setup_rules():
     with onto:
-        # Transaction(Customer, Book) -> purchases(Customer, Book)
+        
         rule_purch = Imp()
         rule_purch.set_as_rule(
             "Transaction(?t) ^ involves(?t, ?c) ^ involves(?t, ?b) ^ Customer(?c) ^ Book(?b) -> purchases(?c, ?b)"
@@ -28,11 +28,12 @@ def check_low_stock():
                 if not hasattr(onto, low_stock_name):
                     ls = onto.LowStock(low_stock_name)
 
+
 def run_reasoner_safely():
     try:
-        check_low_stock()  # Handle low stock logic programmatically
+        check_low_stock()  
         with onto:
-            sync_reasoner()  # requires a JRE; safe to skip if missing
+            sync_reasoner()  
     except Exception:
         pass
 
