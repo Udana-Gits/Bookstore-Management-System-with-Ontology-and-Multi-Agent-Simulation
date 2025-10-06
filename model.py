@@ -24,7 +24,8 @@ class EmployeeAgent(Agent):
     def __init__(self, model, employee_ind):
         super().__init__(model)
         self.ind = employee_ind
-        self.model.bus.subscribe(TOPIC_RESTOCK_REQ, self._restock)
+        # Employees don't subscribe directly to restock requests anymore.
+        # The model will centrally assign restock requests to a single employee.
     def _restock(self, payload):
         book = payload["book"]
         q = book.availableQuantity if book.availableQuantity is not None else 0
@@ -52,16 +53,52 @@ class BookstoreModel(Model):
         self.steps = steps
         self.total_transactions = 0
         self.restock_events = 0
-
-        # subscribe model handler
+        # subscribe model handlers
         self.bus.subscribe(TOPIC_PURCHASE_REQ, self._handle_purchase)
+        # handle restock requests centrally so only one employee performs the restock
+        self.bus.subscribe(TOPIC_RESTOCK_REQ, self._perform_restock)
         self.bus.subscribe(TOPIC_RESTOCK_DONE, lambda _: self._count_restock())
 
         # create agents (auto-registered in Mesa 3.x)
-        for c in self.customers: CustomerAgent(self, c)
-        for e in self.employees: EmployeeAgent(self, e)
+        for c in self.customers:
+            CustomerAgent(self, c)
+        for e in self.employees:
+            EmployeeAgent(self, e)
 
     def _count_restock(self): self.restock_events += 1
+
+    def _perform_restock(self, payload):
+        """Handle a restock request by picking one employee (round-robin) and performing the restock once.
+        Publishes TOPIC_RESTOCK_DONE with payload {'book': book, 'by': employee, 'cost': cost}.
+        """
+        book = payload.get('book')
+        if book is None:
+            return
+
+        # pick an employee in round-robin fashion
+        if not self.employees:
+            chosen = None
+        else:
+            if not hasattr(self, '_next_employee_index'):
+                self._next_employee_index = 0
+            chosen = self.employees[self._next_employee_index % len(self.employees)]
+            self._next_employee_index = (self._next_employee_index + 1) % max(1, len(self.employees))
+
+        # perform the restock centrally
+        q = book.availableQuantity if book.availableQuantity is not None else 0
+        restock_qty = getattr(self, 'restock_amount', 0) or 0
+        book.availableQuantity = q + restock_qty
+
+        # compute restock cost with formula: restock_price_per_book = selling_price - 200
+        try:
+            selling_price = float(getattr(book, 'hasPrice', 0) or 0)
+        except Exception:
+            selling_price = 0.0
+        restock_price_per_book = max(0.0, selling_price - 200.0)
+        cost = restock_qty * restock_price_per_book
+
+        # publish restock done
+        self.bus.publish(TOPIC_RESTOCK_DONE, {"book": book, "by": chosen, "cost": cost})
 
     def _handle_purchase(self, payload):
         cust, book = payload["customer"], payload["book"]
@@ -92,3 +129,18 @@ class BookstoreModel(Model):
             self.step()
             if (i+1) % 5 == 0:
                 run_reasoner_safely()  # refresh SWRL inferences periodically
+
+    def add_employee(self, employee_entity):
+        """Register a new Employee ontology entity at runtime and create an agent for it."""
+        # attach to inventory
+        try:
+            employee_entity.worksAt = [self.inventory]
+        except Exception:
+            pass
+        # create agent (auto registers)
+        EmployeeAgent(self, employee_entity)
+        # also add to model.employees list
+        try:
+            self.employees.append(employee_entity)
+        except Exception:
+            pass
