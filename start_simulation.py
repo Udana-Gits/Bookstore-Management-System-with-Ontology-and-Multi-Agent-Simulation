@@ -16,7 +16,7 @@ from flask_socketio import SocketIO
 from ontology import seed_data, onto
 from model import BookstoreModel
 from rules import run_reasoner_safely
-from bus import TOPIC_PURCHASE_RES, TOPIC_RESTOCK_DONE
+from bus import TOPIC_PURCHASE_RES, TOPIC_RESTOCK_DONE, TOPIC_RESTOCK_REQ
 
 
 app = Flask(__name__)
@@ -30,7 +30,7 @@ sim_running = False
 sim_speed = 1.0  # multiplier, higher is faster (reduces sleep)
 
 
-def create_simulation(seed=42, steps=100):
+def create_simulation(seed=42, steps=30):
     """Create a fresh simulation instance using ontology seed data."""
     inv, books, customers, employees = seed_data()
     m = BookstoreModel(inv, books, customers, employees,
@@ -286,8 +286,17 @@ def on_start(data=None):
     with sim_lock:
         if sim_running:
             return
-        if sim is None:
-            sim = create_simulation()
+        
+        # Get steps from client data, default to 30 if not provided
+        steps = 30
+        if data and isinstance(data, dict):
+            steps = int(data.get('steps', 30))
+        
+        # Ensure steps is within valid range (10-100)
+        steps = max(10, min(100, steps))
+        
+        # Create new simulation with specified steps
+        sim = create_simulation(steps=steps)
         sim_thread = threading.Thread(target=simulation_runner, args=(sim,), daemon=True)
         sim_thread.start()
 
@@ -306,7 +315,7 @@ def on_reset(data=None):
     # small wait to ensure runner exits
     time.sleep(0.1)
     with sim_lock:
-        sim = create_simulation()
+        sim = create_simulation(steps=30)  # Reset with default 30 steps
     socketio.emit('simulation_reset', snapshot(sim))
 
 
@@ -323,32 +332,201 @@ def on_set_speed(data):
 @socketio.on('add_employee')
 def on_add_employee(data):
     """Create an Employee in the ontology and register an agent at runtime.
-    Expects data: { 'name': 'Emp_Name' } (optional name)"""
-    name = (data or {}).get('name')
+    Expects data: { 'name': 'Emp_Name' }"""
+    name = (data or {}).get('name', '').strip()
+    
+    if not name:
+        socketio.emit('notification', {'message': 'Employee name is required', 'type': 'error'})
+        return {'status': 'error', 'error': 'Name required'}
+    
     with sim_lock:
         try:
-            # create unique name if not provided
-            base = name or f"EmpRuntime"
-            # ensure unique suffix
-            idx = 0
-            candidate = f"{base}_{idx}"
-            while hasattr(onto, candidate):
-                idx += 1
-                candidate = f"{base}_{idx}"
-            # create ontology Employee
-            Emp = onto.Employee
-            new_emp = Emp(candidate)
-            # attach to inventory if sim exists
+            # Check if employee name already exists
+            existing_employees = [e.name for e in onto.Employee.instances()]
+            if name in existing_employees:
+                socketio.emit('notification', {'message': f'Employee {name} already exists', 'type': 'error'})
+                return {'status': 'error', 'error': 'Employee already exists'}
+            
+            # Create ontology Employee with given name
+            from ontology import Employee
+            new_emp = Employee(name)
+            
+            # Add to simulation if it exists
             if sim:
                 sim.add_employee(new_emp)
-                # return updated snapshot
+                # Return updated snapshot
                 socketio.emit('simulation_update', snapshot(sim))
-                socketio.emit('restock_event', {'book': None, 'by': new_emp.name})
-                socketio.emit('notification', {'message': f'Employee {new_emp.name} added', 'type': 'success'})
-                return {'status': 'ok', 'name': new_emp.name}
+                socketio.emit('notification', {'message': f'Employee {name} added successfully', 'type': 'success'})
+                return {'status': 'ok', 'name': name}
             else:
+                socketio.emit('notification', {'message': 'No simulation running', 'type': 'error'})
                 return {'status': 'no_sim'}
         except Exception as e:
+            socketio.emit('notification', {'message': f'Error adding employee: {str(e)}', 'type': 'error'})
+            return {'status': 'error', 'error': str(e)}
+
+
+@socketio.on('remove_employee')
+def on_remove_employee(data):
+    """Remove an Employee from the ontology and simulation.
+    Expects data: { 'name': 'Employee_Name' }"""
+    name = (data or {}).get('name', '').strip()
+    
+    if not name:
+        socketio.emit('notification', {'message': 'Employee name is required', 'type': 'error'})
+        return {'status': 'error', 'error': 'Name required'}
+    
+    with sim_lock:
+        try:
+            # Find the employee in ontology
+            employee_to_remove = None
+            for employee in onto.Employee.instances():
+                if employee.name == name:
+                    employee_to_remove = employee
+                    break
+            
+            if not employee_to_remove:
+                socketio.emit('notification', {'message': f'Employee {name} not found', 'type': 'error'})
+                return {'status': 'error', 'error': 'Employee not found'}
+            
+            # Remove from simulation if it exists
+            if sim:
+                sim.remove_employee(employee_to_remove)
+                # Return updated snapshot
+                socketio.emit('simulation_update', snapshot(sim))
+                socketio.emit('notification', {'message': f'Employee {name} removed successfully', 'type': 'success'})
+                return {'status': 'ok', 'name': name}
+            else:
+                socketio.emit('notification', {'message': 'No simulation running', 'type': 'error'})
+                return {'status': 'no_sim'}
+        except Exception as e:
+            socketio.emit('notification', {'message': f'Error removing employee: {str(e)}', 'type': 'error'})
+            return {'status': 'error', 'error': str(e)}
+
+
+@socketio.on('add_customer')
+def on_add_customer(data):
+    """Create a Customer in the ontology and register an agent at runtime.
+    Expects data: { 'name': 'Customer_Name' }"""
+    name = (data or {}).get('name', '').strip()
+    
+    if not name:
+        socketio.emit('notification', {'message': 'Customer name is required', 'type': 'error'})
+        return {'status': 'error', 'error': 'Name required'}
+    
+    with sim_lock:
+        try:
+            # Check if customer name already exists
+            existing_customers = [c.name for c in onto.Customer.instances()]
+            if name in existing_customers:
+                socketio.emit('notification', {'message': f'Customer {name} already exists', 'type': 'error'})
+                return {'status': 'error', 'error': 'Customer already exists'}
+            
+            # Create ontology Customer with given name
+            from ontology import Customer
+            new_customer = Customer(name)
+            
+            # Add to simulation if it exists
+            if sim:
+                sim.add_customer(new_customer)
+                # Return updated snapshot
+                socketio.emit('simulation_update', snapshot(sim))
+                socketio.emit('notification', {'message': f'Customer {name} added successfully', 'type': 'success'})
+                return {'status': 'ok', 'name': name}
+            else:
+                socketio.emit('notification', {'message': 'No simulation running', 'type': 'error'})
+                return {'status': 'no_sim'}
+        except Exception as e:
+            socketio.emit('notification', {'message': f'Error adding customer: {str(e)}', 'type': 'error'})
+            return {'status': 'error', 'error': str(e)}
+
+
+@socketio.on('remove_customer')
+def on_remove_customer(data):
+    """Remove a Customer from the ontology and simulation.
+    Expects data: { 'name': 'Customer_Name' }"""
+    name = (data or {}).get('name', '').strip()
+    
+    if not name:
+        socketio.emit('notification', {'message': 'Customer name is required', 'type': 'error'})
+        return {'status': 'error', 'error': 'Name required'}
+    
+    with sim_lock:
+        try:
+            # Find the customer in ontology
+            customer_to_remove = None
+            for customer in onto.Customer.instances():
+                if customer.name == name:
+                    customer_to_remove = customer
+                    break
+            
+            if not customer_to_remove:
+                socketio.emit('notification', {'message': f'Customer {name} not found', 'type': 'error'})
+                return {'status': 'error', 'error': 'Customer not found'}
+            
+            # Remove from simulation if it exists
+            if sim:
+                sim.remove_customer(customer_to_remove)
+                # Return updated snapshot
+                socketio.emit('simulation_update', snapshot(sim))
+                socketio.emit('notification', {'message': f'Customer {name} removed successfully', 'type': 'success'})
+                return {'status': 'ok', 'name': name}
+            else:
+                socketio.emit('notification', {'message': 'No simulation running', 'type': 'error'})
+                return {'status': 'no_sim'}
+        except Exception as e:
+            socketio.emit('notification', {'message': f'Error removing customer: {str(e)}', 'type': 'error'})
+            return {'status': 'error', 'error': str(e)}
+
+
+@socketio.on('update_stock_level')
+def on_update_stock_level(data):
+    """Update the maximum stock level for inventory management.
+    Expects data: { 'stock_level': int }"""
+    stock_level = (data or {}).get('stock_level', 10)
+    
+    try:
+        stock_level = int(stock_level)
+        if stock_level < 1 or stock_level > 50:
+            socketio.emit('notification', {'message': 'Stock level must be between 1 and 50', 'type': 'error'})
+            return {'status': 'error', 'error': 'Invalid range'}
+    except ValueError:
+        socketio.emit('notification', {'message': 'Invalid stock level value', 'type': 'error'})
+        return {'status': 'error', 'error': 'Invalid value'}
+    
+    with sim_lock:
+        try:
+            if sim:
+                # Update the simulation's max stock level
+                sim.max_stock_level = stock_level
+                
+                # Trigger intelligent restocking for books that need it based on sales velocity
+                for book in sim.books:
+                    current_qty = book.availableQuantity if book.availableQuantity is not None else 0
+                    book_id = book.name
+                    
+                    # Get sales velocity data
+                    total_sales = sim.book_sales_count.get(book_id, 0)
+                    recent_sales = len(sim.book_sales_recent.get(book_id, []))
+                    steps_elapsed = max(1, sim.current_step)
+                    recent_velocity = recent_sales / min(5, max(1, sim.current_step))
+                    
+                    # Determine if restocking is needed based on velocity and new max level
+                    if recent_velocity >= 0.5 and current_qty < stock_level * 0.4:  # Active books need more stock
+                        sim.bus.publish(TOPIC_RESTOCK_REQ, {"book": book})
+                    elif recent_velocity >= 0.2 and current_qty < stock_level * 0.2:  # Medium activity books
+                        sim.bus.publish(TOPIC_RESTOCK_REQ, {"book": book})
+                    elif current_qty < stock_level * 0.1:  # Even slow books need minimum stock
+                        sim.bus.publish(TOPIC_RESTOCK_REQ, {"book": book})
+                
+                # Return updated snapshot
+                socketio.emit('simulation_update', snapshot(sim))
+                return {'status': 'ok', 'stock_level': stock_level}
+            else:
+                socketio.emit('notification', {'message': 'No simulation running', 'type': 'error'})
+                return {'status': 'no_sim'}
+        except Exception as e:
+            socketio.emit('notification', {'message': f'Error updating stock level: {str(e)}', 'type': 'error'})
             return {'status': 'error', 'error': str(e)}
 
 
@@ -364,7 +542,7 @@ def open_browser_delayed(url, delay=1.0):
 
 if __name__ == '__main__':
     # Prepare a simulation instance so clients see an initial state
-    sim = create_simulation()
+    sim = create_simulation(steps=30)  # Initialize with default 30 steps
 
     # Open browser after server starts
     open_browser_delayed('http://127.0.0.1:5000', delay=1.0)

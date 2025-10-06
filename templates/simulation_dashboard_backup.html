@@ -15,7 +15,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #00cec9 0%, #55a3ff 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
             min-height: 100vh;
         }
@@ -88,7 +88,7 @@
             transform: none;
         }
         
-        .speed-control, .steps-control {
+        .speed-control {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -96,13 +96,13 @@
             margin: 0 10px;
         }
         
-        .speed-control label, .steps-control label {
+        .speed-control label {
             font-size: 0.9em;
             font-weight: 500;
             color: #495057;
         }
         
-        .speed-slider, .steps-slider {
+        .speed-slider {
             width: 120px;
             height: 6px;
             border-radius: 3px;
@@ -111,7 +111,7 @@
             cursor: pointer;
         }
         
-        .speed-slider::-webkit-slider-thumb, .steps-slider::-webkit-slider-thumb {
+        .speed-slider::-webkit-slider-thumb {
             appearance: none;
             width: 16px;
             height: 16px;
@@ -120,7 +120,7 @@
             cursor: pointer;
         }
         
-        .speed-slider::-moz-range-thumb, .steps-slider::-moz-range-thumb {
+        .speed-slider::-moz-range-thumb {
             width: 16px;
             height: 16px;
             border-radius: 50%;
@@ -145,18 +145,6 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
         
-        /* Make transaction log card taller */
-        .card:has(.transaction-log) {
-            min-height: 700px;
-            height: auto;
-        }
-        
-        /* Make employee card taller */
-        .card:has(#employeeList) {
-            min-height: 600px;
-            height: auto;
-        }
-        
         .card h3 {
             color: #333;
             margin-bottom: 20px;
@@ -174,7 +162,7 @@
         }
         
         .stat-card {
-            background: linear-gradient(135deg, #81ecec 0%, #74b9ff 100%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             padding: 20px;
             border-radius: 12px;
@@ -278,140 +266,8 @@
         .activity-medium { background: #fff3cd; color: #856404; }
         .activity-low { background: #f8d7da; color: #721c24; }
         
-        .customer-management {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            align-items: center;
-        }
-        
-        .customer-management input {
-            flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 14px;
-        }
-        
-        .customer-management input:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
-        }
-        
-        .btn-add-customer {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-        
-        .btn-add-customer:hover {
-            background: #218838;
-        }
-        
-        .btn-add-customer:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-        }
-        
-        .btn-remove-customer {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-        
-        .btn-remove-customer:hover {
-            background: #c82333;
-        }
-        
-        .customer-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        .customer-item:last-child {
-            border-bottom: none;
-        }
-        
-        .customer-info {
-            flex: 1;
-        }
-        
-        .stock-control {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-        }
-        
-        .stock-control label {
-            font-weight: 600;
-            color: #495057;
-            white-space: nowrap;
-            font-size: 14px;
-        }
-        
-        .stock-slider {
-            flex: 1;
-            height: 6px;
-            border-radius: 3px;
-            background: #dee2e6;
-            outline: none;
-            -webkit-appearance: none;
-        }
-        
-        .stock-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #007bff;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .stock-slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #007bff;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .stock-value {
-            background: #007bff;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-weight: bold;
-            min-width: 50px;
-            text-align: center;
-            font-size: 14px;
-        }
-        
         .transaction-log, .live-log {
-            max-height: 80vh;
-            min-height: 600px;
+            max-height: 300px;
             overflow-y: auto;
             background: #f8f9fa;
             border-radius: 8px;
@@ -574,15 +430,11 @@
         </div>
         
         <div class="controls">
-            <div class="steps-control">
-                <label for="stepsSlider"> Steps: <span id="stepsValue">30</span></label>
-                <input type="range" id="stepsSlider" min="10" max="100" step="5" value="30" class="steps-slider">
-            </div>
             <button id="startBtn" class="btn btn-primary">▶️ Start Simulation</button>
-            <button id="stopBtn" class="btn btn-danger" disabled>⏹️ Pause Simulation</button>
+            <button id="stopBtn" class="btn btn-danger" disabled>⏹️ Stop Simulation</button>
             <button id="resetBtn" class="btn btn-warning">🔄 Reset</button>
             <div class="speed-control">
-                <label for="speedSlider"> Speed: <span id="speedValue">1x</span></label>
+                <label for="speedSlider">⚡ Speed: <span id="speedValue">1x</span></label>
                 <input type="range" id="speedSlider" min="0.1" max="3" step="0.1" value="1" class="speed-slider">
             </div>
             <div class="status-indicator" id="statusIndicator"></div>
@@ -628,11 +480,6 @@
         <div class="dashboard">
             <div class="card">
                 <h3>📚 Inventory Status</h3>
-                <div class="stock-control">
-                    <label for="stockSlider">Max Stock Level:</label>
-                    <input type="range" id="stockSlider" class="stock-slider" min="1" max="50" value="10">
-                    <span id="stockValue" class="stock-value">10</span>
-                </div>
                 <div id="inventoryList"></div>
                 <div class="chart-container">
                     <canvas id="inventoryChart"></canvas>
@@ -641,9 +488,9 @@
             
             <div class="card">
                 <h3>👥 Customer Activity</h3>
-                <div class="customer-management">
-                    <input type="text" id="customerNameInput" placeholder="Enter customer name..." maxlength="50">
-                    <button id="addCustomerBtn" class="btn-add-customer">Add Customer</button>
+                <div style="display:flex; gap:8px; align-items:center; margin-bottom:15px;">
+                    <input id="newCustomerName" placeholder="Customer name" style="flex:1; padding:8px; border-radius:8px; border:1px solid #ddd" />
+                    <button id="addCustomerBtn" class="btn btn-primary">Add</button>
                 </div>
                 <div id="customerList"></div>
                 <div class="chart-container">
@@ -652,7 +499,7 @@
             </div>
             
             <div class="card">
-                <h3> Live Transaction Log</h3>
+                <h3>� Live Transaction Log</h3>
                 <!-- Transaction list (populated by updateTransactionLog) -->
                 <div class="transaction-log" id="transactionLog">
                     <div class="loading">
@@ -672,7 +519,7 @@
                     <input id="newEmployeeName" placeholder="Employee name" style="flex:1; padding:8px; border-radius:8px; border:1px solid #ddd" />
                     <button id="addEmployeeBtn" class="btn btn-primary">Add</button>
                 </div>
-                <div id="employeeList" style="max-height:500px; min-height:400px; overflow:auto; background:#f8f9fa; padding:15px; border-radius:8px">
+                <div id="employeeList" style="max-height:220px; overflow:auto; background:#f8f9fa; padding:10px; border-radius:8px">
                     <!-- employees populated by JS -->
                 </div>
             </div>
@@ -728,12 +575,6 @@
         const resetBtn = document.getElementById('resetBtn');
         const statusIndicator = document.getElementById('statusIndicator');
         const statusText = document.getElementById('statusText');
-        
-        // Steps and speed sliders
-        const stepsSlider = document.getElementById('stepsSlider');
-        const stepsValue = document.getElementById('stepsValue');
-        const speedSlider = document.getElementById('speedSlider');
-        const speedValue = document.getElementById('speedValue');
         
         // Initialize charts
         function initializeCharts() {
@@ -879,17 +720,16 @@
                 else if (customer.purchase_count > 4) activityClass = 'activity-medium';
                 
                 item.innerHTML = `
-                    <div class="customer-info">
-                        <div>
-                            <strong>${customer.name}</strong><br>
-                            <small>LKR ${customer.total_spent.toFixed(2)} spent</small>
-                        </div>
+                    <div>
+                        <strong>${customer.name}</strong><br>
+                        <small>LKR ${customer.total_spent.toFixed(2)} spent</small>
                     </div>
                     <div class="customer-activity">
                         <span class="activity-badge ${activityClass}">
                             ${customer.purchase_count} purchases
                         </span>
-                        <button class="btn-remove-customer" onclick="removeCustomer('${customer.name}')">Remove</button>
+                        <button class="btn btn-danger" style="margin-left: 10px; padding: 4px 8px; font-size: 0.8em;" 
+                                onclick="removeCustomer('${customer.name}')">Remove</button>
                     </div>
                 `;
                 container.appendChild(item);
@@ -934,10 +774,7 @@
                 div.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                         <strong style="font-size: 1.1em;">${emp.name}</strong>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="activity-badge ${activityClass}" style="font-size: 0.8em; padding: 4px 8px; border-radius: 12px;">${activityText}</span>
-                            <button class="btn-remove-customer" onclick="removeEmployee('${emp.name}')" style="padding: 3px 6px; font-size: 11px;">Remove</button>
-                        </div>
+                        <span class="activity-badge ${activityClass}" style="font-size: 0.8em; padding: 4px 8px; border-radius: 12px;">${activityText}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; font-size: 0.9em; color: #666;">
                         <span>Restocks: <strong>${restocksHandled}</strong></span>
@@ -1108,13 +945,12 @@
         
         // Event listeners
         startBtn.addEventListener('click', () => {
-            const steps = parseInt(stepsSlider.value);
-            socket.emit('start_simulation', { steps: steps });
+            socket.emit('start_simulation');
             startBtn.disabled = true;
             stopBtn.disabled = false;
             isRunning = true;
             updateStatus('Running...', true);
-            showNotification(`Simulation started for ${steps} steps!`, 'success');
+            showNotification('Simulation started!', 'success');
         });
         
         stopBtn.addEventListener('click', () => {
@@ -1135,13 +971,10 @@
             showNotification('Simulation reset!', 'info');
         });
         
-        // Steps control
-        stepsSlider.addEventListener('input', (e) => {
-            const steps = parseInt(e.target.value);
-            stepsValue.textContent = steps;
-        });
-        
         // Speed control
+        const speedSlider = document.getElementById('speedSlider');
+        const speedValue = document.getElementById('speedValue');
+        
         speedSlider.addEventListener('input', (e) => {
             const speed = parseFloat(e.target.value);
             speedValue.textContent = speed + 'x';
@@ -1233,77 +1066,36 @@
         const newEmployeeName = document.getElementById('newEmployeeName');
         addEmployeeBtn.addEventListener('click', () => {
             const name = newEmployeeName.value && newEmployeeName.value.trim();
-            if (!name) {
-                showNotification('Please enter an employee name', 'error');
-                return;
-            }
             socket.emit('add_employee', { name: name });
             newEmployeeName.value = '';
         });
-        
-        // Allow Enter key to add employee
-        newEmployeeName.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                addEmployeeBtn.click();
-            }
-        });
-        
-        // Remove employee function (called by remove buttons)
-        window.removeEmployee = function(employeeName) {
-            if (confirm(`Are you sure you want to remove employee "${employeeName}"?`)) {
-                socket.emit('remove_employee', { name: employeeName });
-            }
-        };
-        
-        // Add customer functionality
+
+        // Add customer button
         const addCustomerBtn = document.getElementById('addCustomerBtn');
-        const customerNameInput = document.getElementById('customerNameInput');
-        
+        const newCustomerName = document.getElementById('newCustomerName');
         addCustomerBtn.addEventListener('click', () => {
-            const name = customerNameInput.value && customerNameInput.value.trim();
-            if (!name) {
+            const name = newCustomerName.value && newCustomerName.value.trim();
+            if (name) {
+                socket.emit('add_customer', { name: name });
+                newCustomerName.value = '';
+            } else {
                 showNotification('Please enter a customer name', 'error');
-                return;
             }
-            socket.emit('add_customer', { name: name });
-            customerNameInput.value = '';
         });
-        
-        // Allow Enter key to add customer
-        customerNameInput.addEventListener('keypress', (e) => {
+
+        // Allow adding customer by pressing Enter in the input field
+        newCustomerName.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 addCustomerBtn.click();
             }
         });
-        
-        // Remove customer function (called by remove buttons)
+
+        // Remove customer function (called from remove buttons)
         window.removeCustomer = function(customerName) {
             if (confirm(`Are you sure you want to remove customer "${customerName}"?`)) {
                 socket.emit('remove_customer', { name: customerName });
             }
         };
-        
-        // Stock level slider functionality
-        const stockSlider = document.getElementById('stockSlider');
-        const stockValue = document.getElementById('stockValue');
-        
-        // Update display when slider changes
-        stockSlider.addEventListener('input', (e) => {
-            const value = e.target.value;
-            stockValue.textContent = value;
-        });
-        
-        // Send new stock level to server when user stops adjusting
-        stockSlider.addEventListener('change', (e) => {
-            const newStockLevel = parseInt(e.target.value);
-            socket.emit('update_stock_level', { stock_level: newStockLevel });
-            showNotification(`Max stock level updated to ${newStockLevel}`, 'success');
-        });
-        
-        // Handle notification events from server
-        socket.on('notification', (data) => {
-            showNotification(data.message, data.type || 'info');
-        });
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {

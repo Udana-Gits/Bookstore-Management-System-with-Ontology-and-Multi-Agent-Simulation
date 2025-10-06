@@ -1,4 +1,5 @@
 # ontology.py
+
 from owlready2 import get_ontology, Thing, DataProperty, ObjectProperty, FunctionalProperty, destroy_entity
 
 onto = get_ontology("http://example.org/bookstore.owl")
@@ -14,11 +15,10 @@ with onto:
 
     # Data properties
     class hasAuthor(DataProperty, FunctionalProperty): range = [str]
-    class hasGenre(DataProperty):                      range = [str]  # multi-valued
+    class hasGenre(DataProperty):                      range = [str]  
     class hasPrice(DataProperty, FunctionalProperty):  range = [float]
     class availableQuantity(DataProperty, FunctionalProperty): range = [int]
 
-    # Friendly display title (avoid using the RDF name/IRI for human titles)
     class title(DataProperty, FunctionalProperty): range = [str]
 
     # Object properties
@@ -38,7 +38,6 @@ def seed_data():
                     pass
         inv = Inventory("MainInventory")
         
-        # Practical book data with realistic Sri Lankan prices (LKR 1000-3000) and Sinhala names
         book_data = [
             {"title": "Madol Doova", "author": "Martin Wickramasinghe", "genres": ["Fiction"], "price": 1250.00},
             {"title": "Gamperaliya", "author": "Martin Wickramasinghe", "genres": ["Fiction"], "price": 2400.00},
@@ -59,7 +58,13 @@ def seed_data():
             b.availableQuantity = random.randint(1, 6)
             books.append(b)
         
-        customers = [Customer(f"Cust_{i}") for i in range(4)]
+        # Create customers with more realistic names
+        customer_names = ["Kasun_Silva", "Nimal_Perera", "Saman_Fernando", "Ruwan_Jayasinghe", "Chamari_Wijeratne"]
+        customers = []
+        for i in range(4):
+            name = customer_names[i] if i < len(customer_names) else f"Customer_{i}"
+            customers.append(Customer(name))
+            
         employees = [Employee(f"Emp_{i}") for i in range(2)]
         for e in employees: e.worksAt = [inv]
     return inv, books, customers, employees
