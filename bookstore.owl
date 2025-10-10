@@ -82,7 +82,7 @@
   <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Martin Wickramasinghe</hasAuthor>
   <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
   <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1250.0</hasPrice>
-  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</availableQuantity>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</availableQuantity>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Book_1">
@@ -91,7 +91,7 @@
   <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Martin Wickramasinghe</hasAuthor>
   <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
   <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2400.0</hasPrice>
-  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</availableQuantity>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</availableQuantity>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Book_2">
@@ -100,17 +100,17 @@
   <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Martin Wickramasinghe</hasAuthor>
   <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
   <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1850.0</hasPrice>
-  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</availableQuantity>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</availableQuantity>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Book_3">
   <rdf:type rdf:resource="#Book"/>
   <title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Golu Hadawatha</title>
   <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Karunasena Jayalath</hasAuthor>
-  <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
   <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Romance</hasGenre>
+  <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
   <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1650.0</hasPrice>
-  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</availableQuantity>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</availableQuantity>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Book_4">
@@ -119,7 +119,7 @@
   <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ediriweera Sarachchandra</hasAuthor>
   <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
   <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2200.0</hasPrice>
-  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</availableQuantity>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</availableQuantity>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Book_5">
@@ -128,40 +128,40 @@
   <hasAuthor rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Simon Nawagattegama</hasAuthor>
   <hasGenre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiction</hasGenre>
   <hasPrice rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1450.0</hasPrice>
-  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</availableQuantity>
+  <availableQuantity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</availableQuantity>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Kasun_Silva">
   <rdf:type rdf:resource="#Customer"/>
-  <purchases rdf:resource="#Book_5"/>
   <purchases rdf:resource="#Book_0"/>
-  <purchases rdf:resource="#Book_2"/>
   <purchases rdf:resource="#Book_1"/>
-  <purchases rdf:resource="#Book_4"/>
+  <purchases rdf:resource="#Book_2"/>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Nimal_Perera">
   <rdf:type rdf:resource="#Customer"/>
+  <purchases rdf:resource="#Book_1"/>
+  <purchases rdf:resource="#Book_0"/>
   <purchases rdf:resource="#Book_3"/>
+  <purchases rdf:resource="#Book_4"/>
   <purchases rdf:resource="#Book_5"/>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Saman_Fernando">
   <rdf:type rdf:resource="#Customer"/>
-  <purchases rdf:resource="#Book_0"/>
   <purchases rdf:resource="#Book_1"/>
-  <purchases rdf:resource="#Book_3"/>
+  <purchases rdf:resource="#Book_5"/>
   <purchases rdf:resource="#Book_2"/>
-  <purchases rdf:resource="#Book_4"/>
+  <purchases rdf:resource="#Book_0"/>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Ruwan_Jayasinghe">
   <rdf:type rdf:resource="#Customer"/>
   <purchases rdf:resource="#Book_1"/>
-  <purchases rdf:resource="#Book_3"/>
   <purchases rdf:resource="#Book_0"/>
+  <purchases rdf:resource="#Book_5"/>
+  <purchases rdf:resource="#Book_3"/>
   <purchases rdf:resource="#Book_2"/>
-  <purchases rdf:resource="#Book_4"/>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Emp_0">
@@ -174,256 +174,124 @@
   <worksAt rdf:resource="#MainInventory"/>
 </owl:NamedIndividual>
 
-<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_1_0">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_1"/>
-  <involves rdf:resource="#Ruwan_Jayasinghe"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_0_1">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_0"/>
-  <involves rdf:resource="#Saman_Fernando"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_3_2">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_3"/>
-  <involves rdf:resource="#Ruwan_Jayasinghe"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_5_3">
+<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_0_0">
   <rdf:type rdf:resource="#Transaction"/>
   <involves rdf:resource="#Kasun_Silva"/>
-  <involves rdf:resource="#Book_5"/>
+  <involves rdf:resource="#Book_0"/>
 </owl:NamedIndividual>
 
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_1_4">
+<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_1_1">
   <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Saman_Fernando"/>
+  <involves rdf:resource="#Ruwan_Jayasinghe"/>
   <involves rdf:resource="#Book_1"/>
 </owl:NamedIndividual>
 
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_0_5">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_0"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_5_6">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-  <involves rdf:resource="#Book_5"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_3_7">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Saman_Fernando"/>
-  <involves rdf:resource="#Book_3"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_2_8">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_2"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Nimal_Perera_Book_3_9">
+<owl:NamedIndividual rdf:about="#T_Nimal_Perera_Book_1_2">
   <rdf:type rdf:resource="#Transaction"/>
   <involves rdf:resource="#Nimal_Perera"/>
-  <involves rdf:resource="#Book_3"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_3_10">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Saman_Fernando"/>
-  <involves rdf:resource="#Book_3"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_2_11">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Saman_Fernando"/>
-  <involves rdf:resource="#Book_2"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_3_12">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_3"/>
-  <involves rdf:resource="#Ruwan_Jayasinghe"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_2_13">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_2"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_1_14">
-  <rdf:type rdf:resource="#Transaction"/>
   <involves rdf:resource="#Book_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_1_3">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Kasun_Silva"/>
+  <involves rdf:resource="#Book_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Nimal_Perera_Book_0_4">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Book_0"/>
+  <involves rdf:resource="#Nimal_Perera"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_1_5">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Saman_Fernando"/>
+  <involves rdf:resource="#Book_1"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_0_6">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Ruwan_Jayasinghe"/>
+  <involves rdf:resource="#Book_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_5_7">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Ruwan_Jayasinghe"/>
+  <involves rdf:resource="#Book_5"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Nimal_Perera_Book_3_8">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Book_3"/>
+  <involves rdf:resource="#Nimal_Perera"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_2_9">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Book_2"/>
   <involves rdf:resource="#Kasun_Silva"/>
 </owl:NamedIndividual>
 
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_4_15">
+<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_5_10">
   <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Book_5"/>
   <involves rdf:resource="#Saman_Fernando"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_0_11">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Ruwan_Jayasinghe"/>
+  <involves rdf:resource="#Book_0"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Nimal_Perera_Book_4_12">
+  <rdf:type rdf:resource="#Transaction"/>
   <involves rdf:resource="#Book_4"/>
+  <involves rdf:resource="#Nimal_Perera"/>
 </owl:NamedIndividual>
 
-<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_1_16">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_1"/>
-  <involves rdf:resource="#Ruwan_Jayasinghe"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_2_17">
+<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_2_13">
   <rdf:type rdf:resource="#Transaction"/>
   <involves rdf:resource="#Book_2"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_2_18">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_2"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_3_19">
-  <rdf:type rdf:resource="#Transaction"/>
   <involves rdf:resource="#Saman_Fernando"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_3_14">
+  <rdf:type rdf:resource="#Transaction"/>
+  <involves rdf:resource="#Ruwan_Jayasinghe"/>
   <involves rdf:resource="#Book_3"/>
 </owl:NamedIndividual>
 
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_0_20">
+<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_5_15">
   <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_0"/>
-  <involves rdf:resource="#Saman_Fernando"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_0_21">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_0"/>
   <involves rdf:resource="#Ruwan_Jayasinghe"/>
+  <involves rdf:resource="#Book_5"/>
 </owl:NamedIndividual>
 
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_3_22">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Saman_Fernando"/>
-  <involves rdf:resource="#Book_3"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_2_23">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Saman_Fernando"/>
-  <involves rdf:resource="#Book_2"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Nimal_Perera_Book_5_24">
+<owl:NamedIndividual rdf:about="#T_Nimal_Perera_Book_5_16">
   <rdf:type rdf:resource="#Transaction"/>
   <involves rdf:resource="#Nimal_Perera"/>
   <involves rdf:resource="#Book_5"/>
 </owl:NamedIndividual>
 
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_5_25">
+<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_5_17">
   <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-  <involves rdf:resource="#Book_5"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_1_26">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Saman_Fernando"/>
-  <involves rdf:resource="#Book_1"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_4_27">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-  <involves rdf:resource="#Book_4"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_1_28">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Saman_Fernando"/>
-  <involves rdf:resource="#Book_1"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_5_29">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-  <involves rdf:resource="#Book_5"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_2_30">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Saman_Fernando"/>
-  <involves rdf:resource="#Book_2"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_2_31">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_2"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_1_32">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Saman_Fernando"/>
-  <involves rdf:resource="#Book_1"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_5_33">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-  <involves rdf:resource="#Book_5"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_5_34">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-  <involves rdf:resource="#Book_5"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_2_35">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_2"/>
   <involves rdf:resource="#Ruwan_Jayasinghe"/>
+  <involves rdf:resource="#Book_5"/>
 </owl:NamedIndividual>
 
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_0_36">
+<owl:NamedIndividual rdf:about="#T_Saman_Fernando_Book_0_18">
   <rdf:type rdf:resource="#Transaction"/>
   <involves rdf:resource="#Book_0"/>
-  <involves rdf:resource="#Kasun_Silva"/>
+  <involves rdf:resource="#Saman_Fernando"/>
 </owl:NamedIndividual>
 
-<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_2_37">
+<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_2_19">
   <rdf:type rdf:resource="#Transaction"/>
   <involves rdf:resource="#Book_2"/>
   <involves rdf:resource="#Ruwan_Jayasinghe"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_4_38">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Ruwan_Jayasinghe"/>
-  <involves rdf:resource="#Book_4"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_0_39">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_0"/>
-  <involves rdf:resource="#Kasun_Silva"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Ruwan_Jayasinghe_Book_1_40">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_1"/>
-  <involves rdf:resource="#Ruwan_Jayasinghe"/>
-</owl:NamedIndividual>
-
-<owl:NamedIndividual rdf:about="#T_Kasun_Silva_Book_1_41">
-  <rdf:type rdf:resource="#Transaction"/>
-  <involves rdf:resource="#Book_1"/>
-  <involves rdf:resource="#Kasun_Silva"/>
 </owl:NamedIndividual>
 
 <swrl:Variable rdf:about="urn:swrl#t"/>
